@@ -1,0 +1,269 @@
+
+/*
+    Created on : 2017/08/06, 18:05:29
+    Author     : Masaoki Miura
+*/
+@charset "UTF-8";
+
+#main {
+    background: #f0f8ff;
+    margin-left : auto;
+    margin-right : auto;
+    width : 350px;
+    height : 500px;
+}
+#header {
+    font-size: 12px;
+}
+/* .heightSettingA {
+    height: 24px;
+}*/
+/* window */
+.window {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    margin: auto;
+    z-index: 10;
+    background-color: #FFFAF0;
+    width: 325px;
+    height: 300px;
+    padding: 0.5em 1em;
+    border: solid 3px #A9A9A9;
+    border-radius: 8px;
+}
+
+.translucentBlack {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+
+    width: 100%;
+    height: 100%;
+
+    margin: auto;
+    z-index: 5;
+    background-color: black;
+    opacity: 0.3;
+}
+
+.cdSlectBDiv {
+    height: 250px;
+    overflow-y: auto;
+}
+
+#sel-b-stacked{
+	overflow-x: auto;
+	white-space: nowrap;
+}
+
+#sel-b-disp{
+	text-align: center;
+}
+
+/* answer_field */
+.onRoot {
+    text-align: center;
+    height : 50px;
+    width : 45px;
+    border-radius: 10px;
+    font-size: 18px;
+    border-width: 1px;
+}
+.outRoot {
+    text-align: center;
+    height : 25px;
+    width : 35px;
+    border-width: 1px;
+}
+
+.add {
+    text-align: center;
+    height : 30px;
+    width : 40px;
+    border-radius: 5px;
+    border-width: 1px;
+}
+.tensionSelect {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    height : 20px;
+    width : 35px;
+}
+
+.symbolBtn {
+    text-align: center;
+    font-size: 15px;
+    height : 35px;
+    width : 60px;
+    border-radius: 8px;
+    border-width: 1px;
+}
+
+.input {
+    text-align: center;
+    vertical-align: middle;
+    font-size: 20px;
+    font-weight: bold;
+    width: 70px;
+    height: 70px;
+    overflow : hidden;
+    background-color: #b3d4f2;
+    border-radius: 10px;
+    padding: 1px;
+    word-break : break-all;
+}
+
+.start {
+    width: 210px;
+    height: 60px;
+    font-size: 40px;
+    border-radius: 30px;
+}
+
+.crntArea {
+
+    border-width: 4px;
+    border-style: solid;
+    border-color:  #FF3333;
+    padding: 1px;
+    width: 62px;
+    height: 62px;
+
+}
+.check, .pass, .repeat, .stop{
+    height : 35px;
+    width : 75px;
+    font-size: 18px;
+    border-radius: 10px;
+}
+.clearBtn {
+    text-align: center;
+}
+.ansMsg {
+    height: 18px;
+    font-size: 15px;
+}
+.ansField {
+    width: 100%;
+}
+
+.centering {
+    margin: auto;
+}
+
+.msgArea {
+    font-size: 12px;
+}
+
+input[name~="C"] {
+    background-color: #FFFFE0;
+    border-width: 1px;
+}
+
+input[name~="D"] {
+    background-color: #FFFFE0;
+}
+
+input[name~="E"] {
+    background-color: #F0FFF0;
+}
+input[name~="F"] {
+    background-color: #F0FFF0;
+}
+input[name~="G"] {
+    background-color: #FFEBCD;
+}
+input[name~="A"] {
+    background-color: #FFE4E1;
+}
+input[name~="B"] {
+    background-color: #E0FFFF;
+}
+
+.reload {
+    height: 30px;
+    width: 60px;
+    border-radius: 10px;
+}
+
+.cdSelectBCell {
+    font-size: 12px;
+}
+
+.cdSBCheck {
+    width: 15px;
+    height: 15px;
+}
+
+.missDetailDiv {
+    height: 180px;
+    overflow-y: auto;
+}
+
+.missDetail {
+    text-align: center;
+    font-family: 'ＭＳ ゴシック';
+    background-color: #ffe4c4;
+    border-collapse: collapse;
+}
+
+.missDetailHeader {
+    background-color: #fff5ee;
+}
+
+.missDetail .ansHeader {
+    width: 50px;
+    border: solid 1px gray;
+}
+
+.NoHeader {
+    border: solid 1px gray;
+}
+
+.buttonHeader {
+    width: 80px;
+    border: solid 1px gray;
+}
+.gameOverButton1 {
+    height: 20px;
+    width: 50px;
+    border-radius: 5px;
+}
+
+.NoCell {
+    border: solid 1px gray;
+    font-size: 12px;
+}
+
+.yourAnswerCell {
+    color: #333333;
+    background-color: #E0FFFF;
+    border: solid 1px gray;
+    font-size: 12px;
+}
+
+.yourAnswerCell.NGAns {
+    background-color: #ffcccc;
+}
+
+.correctAnswerCell {
+    background-color: white;
+    border: solid 1px gray;
+    font-size: 12px;
+}
+
+.correctAnswerCell.NGAns2 {
+    background-color: #ffff99;
+}
+
+.hiddenElm {
+    display: none;
+}
+
+.unvisible {
+    visibility: hidden;
+}

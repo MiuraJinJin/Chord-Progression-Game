@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html ng-app="app">
+	<head>
+		<script src="lib/angular/angular.js"></script>
+    <!-- AngularJS v1.6.4 | (c) 2010-2017 Google, Inc. http://angularjs.org | License: MIT https://opensource.org/licenses/mit-license.php -->
+		<script src="js/const.js"></script>
+		<script src="js/global.js"></script>
+		<script src="js/init.js"></script>
+		<script src="js/shareCtrl.js"></script>
+		<script src="js/cpCreate.js"></script>
+		<script src="js/main.js"></script>
+		<script src="js/windowManager.js"></script>
+		<script src="js/canDoInMode.js"></script>
+		<title>コードプログレッションゲーム</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no">
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<link rel="stylesheet" href="css/CPG.css">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+	</head>
+	<body all-round-btn-ditect>
+		<div id="main">
+		<div ng-controller="window" ng-style="windowStyle">
+		<!-- windowのコントロールで扱いたいからこの位置 -->
+		<div ng-style="divLayer" class="translucentBlack">
+		</div>
+		<div class="window">
+			<div class="begin" ng-style="style.bgnStyle">
+				<div class="winTitle">
+					CHORD PROGRESSION GAME
+				</div>
+				<div class="winBtn">
+					<input type="button" value="チャレンジモード" ng-click="toClgSlct();"/>
+					<input type="button" value="トレーニングモード" ng-click="toTrSlct();"/>
+					<input type="button" value="オプション" ng-click="toOption();"/>
+				</div>
+			</div>
+			<div class="challengeSelect" ng-style="style.clgSlctStyle">
+				<div class="winMsg">
+					CHORD PROGRESSION GAME
+				</div>
+				<div class="winBtn">
+					<input type="button" value="スタンダード" ng-click="playAsStd();"/>
+					<input type="button" value="イモータル" ng-click="playAsImtl()"/>
+					<input type="button" value="戻る" ng-click="goBack();"/>
+				</div>
+			</div>
+			<div class="trainingSelect" ng-style="style.trSlctStyle">
+				<div class="winMsg">
+					CHORD PROGRESSION GAME
+				</div>
+				<div class="winBtn">
+					<input type="button" value="レベル指定" ng-click="toLvSlct();"/>
+					<input type="button" value="指定コードを含むCP" ng-click="toCdSlctA();" disabled=""/>
+					<input type="button" value="指定コードから作るCP" ng-click="toCdSlctB();"/>
+					<input type="button" value="戻る" ng-click="goBack();"/>
+				</div>
+			</div>
+			<div class="LvSelect" ng-style="style.lvSlctStyle">
+				<div class="winMsg">
+					CHORD PROGRESSION GAME
+				</div>
+				<div class="winBtn">
+					<select ng-options="level for level in allLevels" ng-model="selectedLv" ng-init="selectedLv=1">
+					</select>
+					<input type="button" value="選択/スタート" ng-click="playAsSlctdLv();"/>
+					<input type="button" value="戻る" ng-click="goBackToTr();"/>
+				</div>
+			</div>
+			<div class="cdSelectA" ng-style="style.cdSlctStyleA">
+				<div class="winMsg">
+					CHORD PROGRESSION GAME
+				</div>
+				<div class="winBtn">
+					<input type="button" value="選択/スタート" ng-click="playAsCdSlctA();"/>
+					<input type="button" value="戻る" ng-click="goBackToTr();"/>
+				</div>
+			</div>
+			<div class="cdSelectB" ng-style="style.cdSlctStyleB">
+				<div class="winMsg">
+					CHORD PROGRESSION GAME
+				</div>
+				<div class="cdSlectBDiv">
+					<div id="sel-b-stacked">
+						<div>{{mng.selectedCdsB}}</div>
+					</div>
+					<div id="sel-b-disp">
+						<div>{{(selBDisp.root + selBDisp.symbol + selBDisp.tension) || "　"}}</div>
+					</div>
+					<div>
+						<table class="centering">
+							<tr>
+								<td>
+									<input type="button" value="F" name="F" class="onRoot" ng-click="selBAddRoot('F');" ng-disabled="mng.rootBtnDisable"/>
+								</td>
+								<td>
+									<input type="button" value="F＃" name="F＃" class="outRoot" ng-click="selBAddRoot('F＃');" ng-disabled="mng.rootBtnDisable"/>
+								</td>
+								<td>
+									<input type="button" value="G" name="G" class="onRoot" ng-click="selBAddRoot('G');" ng-disabled="mng.rootBtnDisable"/>
+								</td>
+								<td>
+									<input type="button" value="G＃" name="G＃" class="outRoot" ng-click="selBAddRoot('G＃');" ng-disabled="mng.rootBtnDisable"/>
+								</td>
+								<td>
+									<input type="button" value="A" name="A" class="onRoot" ng-click="selBAddRoot('A');" ng-disabled="mng.rootBtnDisable"/>
+								</td>
+								<td>
+									<input type="button" value="B♭" name="B♭" class="outRoot" ng-click="selBAddRoot('B♭');" ng-disabled="mng.rootBtnDisable"/>
+								</td>
+								<td>
+									<input type="button" value="B" name="B" class="onRoot" ng-click="selBAddRoot('B');" ng-disabled="mng.rootBtnDisable"/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="button" value="C" name="C" class="onRoot" ng-click="selBAddRoot('C')" ng-disabled="mng.rootBtnDisable"/>
+								<td>
+									<input type="button" value="C＃" name="C＃" class="outRoot" ng-click="selBAddRoot('C＃');" ng-disabled="mng.rootBtnDisable"/>
+								</td>
+								<td>
+									<input type="button" value="D" name="D" class="onRoot" ng-click="selBAddRoot('D');" ng-disabled="mng.rootBtnDisable"/>
+								</td>
+								<td>
+									<input type="button" value="E♭" name="E♭" class="outRoot" ng-click="selBAddRoot('E♭');" ng-disabled="mng.rootBtnDisable"/>
+								</td>
+								<td>
+									<input type="button" value="E" name="E" class="onRoot" ng-click="selBAddRoot('E');" ng-disabled="mng.rootBtnDisable"/>
+								</td>
+								<td>
+									<select id="tension" ng-model="tension" class="tensionSelect">
+										<option value="">なし</option>
+										<option value="♭9">♭9</option>
+										<option value="9">9</option>
+										<option value="＃9">＃9</option>
+										<option value="11">11</option>
+										<option value="＃11">＃11</option>
+										<option value="♭13">♭13</option>
+										<option value="13">13</option>
+									</select>
+								</td>
+								<td>
+									<input type="button" value="add" class="add" ng-click="selBAddTension(tension);"/>
+								</td>
+							</tr>
+						</table>
+						<table class="centering">
+							<tr>
+								<td>
+									<input type="button" value="△" class="symbolBtn" ng-click="addMajorSymbol(selBAddSymbol);"/>
+								</td>
+								<td>
+									<input type="button" value="m" class="symbolBtn" ng-click="addMinorSymbol(selBAddSymbol);"/>
+								</td>
+								<td>
+									<input type="button" value="aug" class="symbolBtn" ng-click="addAugSymbol(selBAddSymbol);"/>
+								</td>
+								<td>
+									<input type="button" value="dim" class="symbolBtn" ng-click="addDimSymbol(selBAddSymbol);"/>
+								</td>
+								<td>
+									<input type="button" value="sus" class="symbolBtn" ng-click="addSusSymbol(selBAddSymbol);"/>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="winBtn">
+					<input type="button" value="追加" ng-click="selBAddCd();"/>
+					<input type="button" value="スタート" ng-click="playAsCdSlctB();"/>
+					<input type="button" value="ＡＣ" ng-click="selBAC();"/>
+					<input type="button" value="戻る" ng-click="goBackToTr();"/>
+				</div>
+			</div>
+			<div class="option" ng-style="style.optionStyle">
+				<div class="winMsg">
+					CHORD PROGRESSION GAME
+				</div>
+				<div>
+					<input type="checkbox" ng-model="mng.option.on1st" id="option1"><label for="option1">コードの転回をなしにする</label>
+				</div>
+				<div>
+					<input type="checkbox" ng-model="mng.option.onBass1st" id="optionB1"><label for="optionB1">ベースを1stに固定する</label>
+				</div>
+				<div>
+					<input type="range" min="0" max="100" step="5" ng-model="wkVol" ng-change="mng.option.bassVol = wkVol/100;">
+					<span>Bass Vol:{{wkVol}}</span>
+				</div>
+				<div>
+					<select ng-options="level for level in playLevels" ng-model="startLevel" ng-init="startLevel=mng.option.startLevel" id="startLvSelect">
+					</select><label for="startLvSelect">ゲームの開始レベル</label>
+				</div>
+				<div>
+					<select ng-options="level for level in playLevels" ng-model="finalLevel" ng-init="finalLevel=mng.option.finalLevel" id="finalLvSelect">
+					</select><label for="finalLvSelect">ゲームの最終レベル</label>
+				</div>
+				<div>
+					<select ng-options="note.value as note.disp for note in noteTypes" ng-model="selectedNoteType" ng-init="selectedNoteType='r'" id="noteTypeSelect">
+					</select><label for="finalLvSelect">音色</label>
+				</div>
+				<div>
+					<input type="range" min="60" max="240" step="2" ng-model="wkBpm" ng-change="mng.option.speed = wkBpm/120;">
+					<span>BPM:{{wkBpm}}</span>
+				</div>
+				<div>
+					<input type="checkbox" ng-model="mng.option.isModeDisp" id="optionMD"><label for="optionMD">ステータス表示</label>
+				</div>
+				<div class="winBtn">
+					<input type="button" value="戻る" ng-click="goBack();"/>
+				</div>
+			</div>
+		</div>
+		</div>
+		<!-- ここからメイン画面の記述 -->
+		<div ng-controller="answer_field" ng-disabled="true">
+		<table id="header" ng-class="{unvisible:mng.option.isModeDisp==false}">
+			<tr>
+				<td width="150"><div>モード：{{mng.mode}}</div></td>
+				<td width="110"><div>正解数　：{{mng.rightCount}}</div></td>
+				<td rowspan="2"><input type="button" value="reload" class="reload" ng-click="restart()"></td>
+			</tr>
+			<tr>
+				<td><div>レベル：{{mng.level}}</div></td>
+				<td><div>ミス回数：{{mng.missCount}}</div></td>
+			</tr>
+		</table>
+		<hr style="margin: 0px;">
+		<table class="ansField">
+			<tr>
+				<td>
+					<table class="centering">
+						<tr>
+							<td><div class="ansMsg">{{answer[0].msg}}</div></td>
+							<td><div class="ansMsg">{{answer[1].msg}}</div></td>
+							<td><div class="ansMsg">{{answer[2].msg}}</div></td>
+							<td><div class="ansMsg">{{answer[3].msg}}</div></td>
+						</tr>
+						<tr>
+							<td class="input" ng-class="ansArea[0]">
+								<div>{{answer[0].value + answer[0].symbol + answer[0].tens}}</div>
+							</td>
+							<td class="input" ng-class="ansArea[1]">
+								<div>{{answer[1].value + answer[1].symbol + answer[1].tens}}</div>
+							</td>
+							<td class="input" ng-class="ansArea[2]">
+								<div>{{answer[2].value + answer[2].symbol + answer[2].tens}}</div>
+							</td>
+							<td class="input" ng-class="ansArea[3]">
+								<div>{{answer[3].value + answer[3].symbol + answer[3].tens}}</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="clearBtn">
+								<input type="button" class="clear" value="clear" ng-click="clear(0);" ng-disabled="mng.unclearable"/>
+							</td>
+							<td class="clearBtn">
+								<input type="button" class="clear" value="clear" ng-click="clear(1);" ng-disabled="mng.unclearable"/>
+							</td>
+							<td class="clearBtn">
+								<input type="button" class="clear" value="clear" ng-click="clear(2);" ng-disabled="mng.unclearable"/>
+							</td>
+							<td class="clearBtn">
+								<input type="button" class="clear" value="clear" ng-click="clear(3);" ng-disabled="mng.unclearable"/>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table class="centering">
+						<tr>
+							<td>
+								<input type="button" class="start" value="{{mng.buttonValue.start}}" ng-click="nextStart();" ng-disabled="mng.unstartable"/>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table class="centering">
+						<tr>
+							<td>
+								<input type="button" class="repeat" value="repeat" ng-click="repeat();" ng-disabled="mng.unrepeatable"/>
+							</td>
+							<td>
+								<input type="button" class="check" value="check" ng-click="check();" ng-disabled="mng.uncheckable"/>
+							</td>
+							<td>
+								<input type="button" class="pass" value="pass" ng-click="pass();" ng-disabled="!mng.canPass"/>
+							</td>
+							<td>
+								<input type="button" class="stop" value="stop" ng-click="stop();" ng-disabled="!mng.currentPlayingSource"/>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table class="centering">
+						<tr>
+							<td>
+								<input type="button" value="F" name="F" class="onRoot" ng-click="display('F');" ng-disabled="mng.rootBtnDisable"/>
+							</td>
+							<td>
+								<input type="button" value="F＃" name="F＃" class="outRoot" ng-click="display('F＃');" ng-disabled="mng.rootBtnDisable"/>
+							</td>
+							<td>
+								<input type="button" value="G" name="G" class="onRoot" ng-click="display('G');" ng-disabled="mng.rootBtnDisable"/>
+							</td>
+							<td>
+								<input type="button" value="G＃" name="G＃" class="outRoot" ng-click="display('G＃');" ng-disabled="mng.rootBtnDisable"/>
+							</td>
+							<td>
+								<input type="button" value="A" name="A" class="onRoot" ng-click="display('A');" ng-disabled="mng.rootBtnDisable"/>
+							</td>
+							<td>
+								<input type="button" value="B♭" name="B♭" class="outRoot" ng-click="display('B♭');" ng-disabled="mng.rootBtnDisable"/>
+							</td>
+							<td>
+								<input type="button" value="B" name="B" class="onRoot" ng-click="display('B');" ng-disabled="mng.rootBtnDisable"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="button" value="C" name="C" class="onRoot" ng-click="display('C')" ng-disabled="mng.rootBtnDisable"/>
+							<td>
+								<input type="button" value="C＃" name="C＃" class="outRoot" ng-click="display('C＃');" ng-disabled="mng.rootBtnDisable"/>
+							</td>
+							<td>
+								<input type="button" value="D" name="D" class="onRoot" ng-click="display('D');" ng-disabled="mng.rootBtnDisable"/>
+							</td>
+							<td>
+								<input type="button" value="E♭" name="E♭" class="outRoot" ng-click="display('E♭');" ng-disabled="mng.rootBtnDisable"/>
+							</td>
+							<td>
+								<input type="button" value="E" name="E" class="onRoot" ng-click="display('E');" ng-disabled="mng.rootBtnDisable"/>
+							</td>
+							<td>
+								<select id="tension" ng-model="tension" class="tensionSelect">
+									<option value="">なし</option>
+									<option value="♭9">♭9</option>
+									<option value="9">9</option>
+									<option value="＃9">＃9</option>
+									<option value="11">11</option>
+									<option value="＃11">＃11</option>
+									<option value="♭13">♭13</option>
+									<option value="13">13</option>
+								</select>
+							</td>
+							<td>
+								<input type="button" value="add" class="add" ng-click="addTension(tension);"/>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table class="centering">
+						<tr>
+							<td>
+								<input type="button" value="△" class="symbolBtn" ng-click="addMajorSymbol();"/>
+							</td>
+							<td>
+								<input type="button" value="m" class="symbolBtn" ng-click="addMinorSymbol();"/>
+							</td>
+							<td>
+								<input type="button" value="aug" class="symbolBtn" ng-click="addAugSymbol();"/>
+							</td>
+							<td>
+								<input type="button" value="dim" class="symbolBtn" ng-click="addDimSymbol();"/>
+							</td>
+							<td>
+								<input type="button" value="sus" class="symbolBtn" ng-click="addSusSymbol();"/>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				   <div class="msgArea">{{mng.msg}}</div><!-- heightSettingAクラスは暫定的　ここは別にクラス定義しそう-->
+				</td>
+		   </tr>
+		</table>
+		<div ng-style="divLayer" class="translucentBlack"></div>
+		<div class="window" ng-style="windowStyle">
+		<div class="gameOver" ng-style="gameOverStyle">
+			<div class="winMsg">
+				GAME OVER
+			</div>
+			<h3>Detail</h3>
+			<div class="missDetailDiv">
+				<table class="missDetail">
+					<tr class="missDetailHeader">
+						<th colspan="1" class="NoHeader">No</th>
+						<th colspan="1" class="ansHeader">①</th>
+						<th colspan="1" class="ansHeader">②</th>
+						<th colspan="1" class="ansHeader">③</th>
+						<th colspan="1" class="ansHeader">④</th>
+						<th colspan="1" class="buttonHeader"></th>
+						<th colspan="1" class="buttonHeader"></th>
+					</tr>
+					<tr ng-repeat="wkObj in mng.missDetail">
+						<td class="NoCell">{{$index + 1}}</td>
+						<td class="correctAnswerCell">{{mng.missDetail[$index].correctAns[0]}}</td>
+						<td class="correctAnswerCell">{{mng.missDetail[$index].correctAns[1]}}</td>
+						<td class="correctAnswerCell">{{mng.missDetail[$index].correctAns[2]}}</td>
+						<td class="correctAnswerCell">{{mng.missDetail[$index].correctAns[3]}}</td>
+						<td class="correctAnswerCell">
+							<input type="button" class="gameOverButton1" value="detail" ng-click="showDetail();"/>
+						</td>
+						<td class="correctAnswerCell">
+							<input type="button" class="gameOverButton1" value="play" ng-click="playBack(mng.missDetail[$index].playBackData);" ng-disabled="mng.unrepeatable"/>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="winBtn">
+				<input type="button" value="もう一度" ng-click="restart();"/>
+			</div>
+		</div>
+		<div class="gameOver" ng-style="gameOverForCompStyle">
+			<div class="winMsg">
+				全クリです。おめでとうございます。
+			</div>
+			<h3>Detail</h3>
+			<div class="missDetailDiv">
+				<table class="missDetail">
+					<tr class="missDetailHeader">
+						<th colspan="1" class="NoHeader">No</th>
+						<th colspan="1" class="ansHeader">①</th>
+						<th colspan="1" class="ansHeader">②</th>
+						<th colspan="1" class="ansHeader">③</th>
+						<th colspan="1" class="ansHeader">④</th>
+						<th colspan="1" class="buttonHeader"></th>
+						<th colspan="1" class="buttonHeader"></th>
+					</tr>
+					<tr ng-repeat="wkObj in mng.missDetail">
+						<td class="NoCell">{{$index + 1}}</td>
+						<td class="correctAnswerCell">{{mng.missDetail[$index].correctAns[0]}}</td>
+						<td class="correctAnswerCell">{{mng.missDetail[$index].correctAns[1]}}</td>
+						<td class="correctAnswerCell">{{mng.missDetail[$index].correctAns[2]}}</td>
+						<td class="correctAnswerCell">{{mng.missDetail[$index].correctAns[3]}}</td>
+						<td class="correctAnswerCell">
+							<input type="button" class="gameOverButton1" value="detail" ng-click="showDetail();"/>
+						</td>
+						<td class="correctAnswerCell">
+							<input type="button" class="gameOverButton1" value="play" ng-click="playBack(mng.missDetail[$index].playBackData);" ng-disabled="mng.unrepeatable"/>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="winBtn">
+				<input type="button" value="もう一度" ng-click="restart();"/>
+			</div>
+		</div>
+		</div>
+		</div>
+		</div>
+	</body>
+</html>
